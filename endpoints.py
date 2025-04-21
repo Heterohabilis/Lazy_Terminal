@@ -36,7 +36,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 模型初始化：全局 agent 和 cleaner
+
 main_agent = None
 cleaner_agent = None
 runtime = None
