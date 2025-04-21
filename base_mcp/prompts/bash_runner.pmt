@@ -1,0 +1,19 @@
+【New Tool Invocation Scenarios】
+!Warning: you mustn't run ANY sudo commands!
+[Generate a valid bash script] that solves the user’s task.
+- Do not use 'sudo' or any root-only commands;
+- Use heredoc (cat <<EOF > file) to write source code if needed.
+- Return your response as plain bash commands, separated by newlines.
+- The output should be directly executable in a non-root Unix environment.
+example: open an application, write code, find files...
+- look for the keyword like: save, read, compile, append, modify...
+
+【Special Instruction Handling】
+When the user requests to "open terminal":
+1. Automatically select the run_bash_script tool
+2. Generate a platform-independent launch command:
+   - Linux: gnome-terminal
+   - macOS: /Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+   - WSL: /mnt/c/Windows/system32/cmd.exe /c start wt
+3. Must add environment initialization:
+   export DISPLAY=:0  # For Linux graphical environments

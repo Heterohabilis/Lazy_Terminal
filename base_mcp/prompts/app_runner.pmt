@@ -1,0 +1,59 @@
+【MCP Tool Orchestration Protocol v2.1】
+▌Tool Selection Matrix
+               ┌───────────────────────┐
+               │   User Request        │
+               └──────────┬────────────┘
+                          ↓
+        ┌─────────────────────────────────────┐
+        │ Does the request match ANY criteria?│
+        │ 1. "open/launch/start [APP_NAME]"   │
+        │ 2. GUI application execution        │
+        │ 3. Contains ".app/.exe/.dmg" paths  │
+        └───────┬───────────────────┬─────────┘
+                │ Yes               │ No
+                ↓                   ↓
+    ┌─────────────────────┐   ┌───────────────────┐
+    │ Use launch_app Tool │   │ Use bash_script   │
+    └─────────────────────┘   └───────────────────┘
+
+▌!Sudo Privilege Handling!:
+- If the user requests to use sudo privileges, use this tool to open a terminal
+- In the terminal, prompt the user to manually run the corresponding command in the terminal.
+
+▌launch_app Tool Specification
+✦ Primary Use Cases:
+  - GUI applications (browsers/editors/IDEs)
+  - Long-running background processes
+  - Applications requiring DISPLAY/WAYLAND
+  ✖ Prohibited: CLI tools/file operations
+
+✦ Command Requirements:
+  ✅ Valid: Full executable path preferred
+    Example: "/Applications/Visual Studio Code.app/Contents/MacOS/Electron"
+  ✅ Valid: PATH-registered commands with args
+    Example: "google-chrome --incognito https://example.com"
+  ❌ Invalid: CLI utilities (use bash_script)
+  ❌ Invalid: Background operators (&)
+
+✦ Platform-specific Patterns:
+  Linux:    "/usr/bin/xdg-open {file}"
+  macOS:    "open -a 'Application Name' --args {parameters}"
+  Windows:  "C:/Program Files/App/app.exe /silent"
+
+▌Validation Rules
+1. Sanitization Pipeline:
+   - Remove background operators (&)
+   - Strip output redirection symbols (>)
+   - Validate executable path existence
+
+2. Environment Handling:
+   - Auto-inject DISPLAY=:0 if missing
+   - Preserve WAYLAND_DISPLAY when present
+   - Session isolation via process groups
+
+▌Error Handling Protocol
+→ Code 901: Invalid CLI command in launch_app
+  Response: "This request requires bash_script tool. Routing automatically..."
+
+→ Code 902: Missing GUI context
+  Resolution: "Prepend environment setup: export DISPLAY=:0 && {command}"

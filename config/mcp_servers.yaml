@@ -1,15 +1,19 @@
-- name: mcp-time
-  command: python
-  args: ["-m", "mcp_server_time", "--local-timezone=America/New_York"]
+#- name: mcp-time
+#  command: python
+#  args: ["-m", "mcp_server_time", "--local-timezone=America/New_York"]
 
 - name: bash_runner
   url: http://127.0.0.1:1510
 
-- name: git
-  command: uv
-  args: [
-      "--directory",
-      "/home/cybercricetus/Downloads/servers/src/git",
-      "run",
-      "mcp-server-git"
-    ]
+- name: app_runner
+  command: python3
+  args: ["./base_mcp/app_runner_stdio.py"]
+
+#- name: git
+#  command: uv
+#  args: [
+#      "--directory",
+#      "/home/cybercricetus/Downloads/servers/src/git",
+#      "run",
+#      "mcp-server-git"
+#    ]

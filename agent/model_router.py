@@ -6,7 +6,7 @@ from coagent.core import AgentSpec, new
 from agent.client_builder import build_model_client
 
 
-async def build_agent(model_name: str, prompt:str) -> AgentSpec:
+async def build_agent(model_name: str, prompt:str, role: str) -> AgentSpec:
     # create ModelClient
     client = build_model_client(model_name)
 
@@ -15,7 +15,7 @@ async def build_agent(model_name: str, prompt:str) -> AgentSpec:
 
     # create agent
     agent = AgentSpec(
-        f"{model_name}_agent",
+        f"{role}_agent",
         new(
             ChatAgent,
             system=prompt,

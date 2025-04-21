@@ -46,27 +46,31 @@ async def agent_start(agent):
                 tool_call = msg.content
                 if "tool_name" in tool_call and "parameters" in tool_call:
                     tool_call = json.loads(extract_json_block(tool_call))
-                    # print(tool_call)
                     raw_result = await call_tool(tool_call["tool_name"], tool_call["parameters"])
                     raw_result = str(raw_result)
 
-                    if should_summarize(raw_result):
+                    # clean the result
+                    try:
+                        summary_input = (
+                                "user: " + user_input + "\n"
+                                                        "guide: \n raw: " + CLEAN + raw_result
+                        )
                         result = await cleaner_agent.run(
-                            ChatMessage(role="system", content="user: "+user_input+
-                                                               "\nguide: "+"\n raw: "+
-                                                               CLEAN+raw_result).encode(),
+                            ChatMessage(role="system", content=summary_input).encode(),
                             stream=False
-                             )
-                        result = (ChatMessage.decode(result)).content
-                    else:
+                        )
+                        result = ChatMessage.decode(result).content
+
+                        memo.add(user_input, json.dumps({
+                            "tool_name": tool_call["tool_name"],
+                            "result": result
+                        }, ensure_ascii=False))
+                    except Exception as e:
                         result = raw_result
-
-                    print("🤖 ", result)
-
-                    memo.add(user_input, json.dumps({
-                        "tool_name": tool_call["tool_name"],
-                        "result": result
-                    }, ensure_ascii=False))
+                        memo.add(user_input, json.dumps({
+                            "tool_name": tool_call["tool_name"],
+                            "result": result
+                        }, ensure_ascii=False))
 
                 else:
                     print("🤖", msg.content)
@@ -80,8 +84,8 @@ async def agent_start(agent):
 async def main():
     set_stderr_logger()
     main_agent_prompt = await get_system_prompt()
-    translator = await build_agent(MAIN_MODEL, main_agent_prompt)
-    await agent_start(translator)
+    main_agent = await build_agent(MAIN_MODEL, main_agent_prompt)
+    await agent_start(main_agent)
 
 
 

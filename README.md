@@ -35,6 +35,13 @@ Launch the assistant with:
 python main.py
 ```
 
+For GUI, use:
+
+```bash
+make backend
+cd frontend && npm run dev
+```
+
 Start interacting with Lazy Terminal directly from your console!
 
 ---
@@ -88,11 +95,24 @@ Ensure they match your settings in `models.yaml`.
 - [ ] Extend toolset (e.g., file handling, browser automation).
 - [ ] Multi-tool calling
 
+--- 
+
+## 📚 Examples
+
+- **GUI examples:**
+
+<img src="https://github.com/user-attachments/assets/b8e4ae9c-fbbc-487f-9996-593ffd269a4f" alt="image" width="75%">
+<img src="https://github.com/user-attachments/assets/3c51f2f4-10ac-44d0-b6f6-dce8f5d6db08" alt="image" width="75%">
+
+- **Terminal-like examples:**
+  
+<img src="https://github.com/user-attachments/assets/6c8f83dc-5f3f-4ced-a860-1e8516a5ee0c" alt="image" width="75%">
+
 ---
 
 ## 🤝 Credits
 
 - [Coagent](https://github.com/OpenCSGs/coagent)
-- [MCP](https://github.com/OpenCSGs/mcp)
+- [MCP](https://modelcontextprotocol.io/introduction)
 
 Enjoy building your intelligent terminal assistant!

@@ -25,3 +25,8 @@ Thumbs.db
 *.iml
 
 test.py
+
+# tmp.
+test_servers/app_runner_stdio.pyfrontend/node_modules/*
+
+node_modules/
